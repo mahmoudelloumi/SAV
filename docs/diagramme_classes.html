@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Diagramme de Classes UML — Système de Gestion SAV</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card-bg: #ffffff;
+    --text: #1f2430;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+  }
+  header {
+    background: #111827;
+    color: #fff;
+    padding: 28px 24px 20px;
+  }
+  header h1 { margin: 0 0 4px 0; font-size: 22px; }
+  header p { margin: 0; color: #b8c0cc; font-size: 14px; }
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  nav a {
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--text);
+    background: #f1f3f6;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  nav a:hover { background: #e5e9f0; }
+  .wrap {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  section { margin-bottom: 40px; scroll-margin-top: 60px; }
+  section h2 { font-size: 18px; margin: 0 0 4px 0; }
+  section .desc { color: var(--muted); font-size: 13.5px; margin: 0 0 16px 0; }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    overflow-x: auto;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: flex-start;
+    min-width: 1400px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--card-bg);
+  }
+  table th, table td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table th { background: #f1f3f6; }
+  .class-block {
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .class-block > .class-title {
+    background: #eef2ff;
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .class-title code { background: none; }
+  code {
+    background: #f1f3f6;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12.5px;
+  }
+  .note {
+    background: #fffbea;
+    border: 1px solid #f5e3a1;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    margin-bottom: 12px;
+  }
+  .note b { color: #92650c; }
+  .enum-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Diagramme de Classes UML — Système de Gestion SAV</h1>
+  <p>Modèle du domaine : utilisateurs, interventions, documents et journalisation</p>
+</header>
+
+<nav>
+  <a href="#diagramme">Diagramme</a>
+  <a href="#classes">Description des Classes</a>
+  <a href="#enums">Énumérations</a>
+  <a href="#relations">Relations</a>
+  <a href="#decisions">Décisions de Conception</a>
+</nav>
+
+<div class="wrap">
+
+  <section id="diagramme">
+    <h2>1. Diagramme de Classes Complet</h2>
+    <div class="card">
+      <div class="mermaid">
+classDiagram
+    direction TB
+
+    class Role {
+        <<enumeration>>
+        DIRECTEUR
+        EMPLOYE_SAV
+        CLIENT
+    }
+
+    class Priorite {
+        <<enumeration>>
+        TRES_URGENT
+        URGENT
+        NORMAL
+        FACULTATIF
+    }
+
+    class EtatIntervention {
+        <<enumeration>>
+        NOUVELLE
+        AFFECTEE
+        EN_ATTENTE
+        EN_COURS
+        TERMINEE
+        ANNULEE
+    }
+
+    class Utilisateur {
+        <<abstract>>
+        #Long id
+        #String nom
+        #String prenom
+        #String email
+        #String motDePasse
+        #String telephone
+        #String adresse
+        #Role role
+        #boolean actif
+        #LocalDateTime dateCreation
+        #LocalDateTime dateModification
+    }
+
+    class Client {
+        -String matriculeFiscal
+        -String rne
+        -String raisonSociale
+        -boolean twoFactorActive
+        -String twoFactorSecret
+    }
+
+    class Employe {
+        -String codeEmploye
+        -String specialite
+    }
+
+    Utilisateur <|-- Client : hérite
+    Utilisateur <|-- Employe : hérite
+    Utilisateur --> Role : role
+
+    class Intervention {
+        -Long id
+        -String code
+        -String description
+        -Priorite priorite
+        -EtatIntervention etat
+        -BigDecimal prixEstime
+        -BigDecimal prixFinal
+        -String rapportTechnique
+        -LocalDateTime dateCreation
+        -LocalDateTime dateCloture
+        -LocalDateTime dateModification
+    }
+
+    Intervention --> Priorite : priorite
+    Intervention --> EtatIntervention : etat
+    Intervention "0..*" --> "1" Client : client
+    Intervention "0..*" --> "0..1" Employe : employeAffecte
+
+    class Commentaire {
+        -Long id
+        -String contenu
+        -LocalDateTime dateCreation
+    }
+
+    Commentaire "0..*" --> "1" Intervention : intervention
+    Commentaire "0..*" --> "1" Utilisateur : auteur
+
+    class PieceJointe {
+        -Long id
+        -String nomFichier
+        -String cheminFichier
+        -String typeFichier
+        -Long tailleFichier
+        -LocalDateTime dateTelechargement
+    }
+
+    PieceJointe "0..*" --> "1" Intervention : intervention
+    PieceJointe "0..*" --> "1" Utilisateur : telechargePar
+
+    class HistoriqueIntervention {
+        -Long id
+        -String champModifie
+        -String ancienneValeur
+        -String nouvelleValeur
+        -LocalDateTime dateModification
+    }
+
+    HistoriqueIntervention "0..*" --> "1" Intervention : intervention
+    HistoriqueIntervention "0..*" --> "1" Utilisateur : modifiePar
+
+    class JournalAudit {
+        -Long id
+        -String action
+        -String typeEntite
+        -Long idEntite
+        -String details
+        -String adresseIp
+        -LocalDateTime dateAction
+    }
+
+    JournalAudit "0..*" --> "1" Utilisateur : effectuePar
+
+    class HistoriqueConnexion {
+        -Long id
+        -String adresseIp
+        -String navigateur
+        -boolean succes
+        -String motifEchec
+        -LocalDateTime dateConnexion
+    }
+
+    HistoriqueConnexion "0..*" --> "1" Utilisateur : utilisateur
+      </div>
+    </div>
+  </section>
+
+  <section id="classes">
+    <h2>2. Description Détaillée des Classes</h2>
+
+    <div class="class-block">
+      <div class="class-title">Utilisateur &lt;&lt;abstract&gt;&gt; — classe de base (héritage JPA JOINED)</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>Long</td><td>PK, auto-généré</td><td>Identifiant unique</td></tr>
+        <tr><td><code>nom</code></td><td>String</td><td>Non null, max 100</td><td>Nom de famille</td></tr>
+        <tr><td><code>prenom</code></td><td>String</td><td>Non null, max 100</td><td>Prénom</td></tr>
+        <tr><td><code>email</code></td><td>String</td><td>Non null, unique, format email</td><td>Adresse e-mail (login)</td></tr>
+        <tr><td><code>motDePasse</code></td><td>String</td><td>Non null, min 8, encodé BCrypt</td><td>Mot de passe hashé</td></tr>
+        <tr><td><code>telephone</code></td><td>String</td><td>Max 20</td><td>Numéro de téléphone</td></tr>
+        <tr><td><code>adresse</code></td><td>String</td><td>Max 500</td><td>Adresse postale</td></tr>
+        <tr><td><code>role</code></td><td>Role</td><td>Non null, enum</td><td>Rôle de l'utilisateur</td></tr>
+        <tr><td><code>actif</code></td><td>boolean</td><td>Default true</td><td>Compte actif ou désactivé</td></tr>
+        <tr><td><code>dateCreation</code></td><td>LocalDateTime</td><td>Auto, non modifiable</td><td>Date de création du compte</td></tr>
+        <tr><td><code>dateModification</code></td><td>LocalDateTime</td><td>Auto</td><td>Dernière modification</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">Client (hérite de Utilisateur)</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>matriculeFiscal</code></td><td>String</td><td>Non null, unique, max 20</td><td>Matricule fiscal de l'entreprise</td></tr>
+        <tr><td><code>rne</code></td><td>String</td><td>Non null, unique, max 20</td><td>Registre National des Entreprises</td></tr>
+        <tr><td><code>raisonSociale</code></td><td>String</td><td>Non null, max 200</td><td>Nom de l'entreprise</td></tr>
+        <tr><td><code>twoFactorActive</code></td><td>boolean</td><td>Default false</td><td>2FA activé ou non</td></tr>
+        <tr><td><code>twoFactorSecret</code></td><td>String</td><td>Nullable</td><td>Clé secrète TOTP (chiffrée)</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">Employe (hérite de Utilisateur) — rôles EMPLOYE_SAV et DIRECTEUR</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>codeEmploye</code></td><td>String</td><td>Non null, unique, max 20</td><td>Code employé interne (EMP-001)</td></tr>
+        <tr><td><code>specialite</code></td><td>String</td><td>Nullable, max 100</td><td>Domaine de spécialisation</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">Intervention — entité centrale du système</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>Long</td><td>PK, auto-généré</td><td>Identifiant technique</td></tr>
+        <tr><td><code>code</code></td><td>String</td><td>Unique, non null, SAV-AAAA-NNNNNN</td><td>Code métier unique</td></tr>
+        <tr><td><code>description</code></td><td>String</td><td>Non null, max 2000</td><td>Description du problème</td></tr>
+        <tr><td><code>priorite</code></td><td>Priorite</td><td>Non null, default NORMAL</td><td>Niveau de priorité</td></tr>
+        <tr><td><code>etat</code></td><td>EtatIntervention</td><td>Non null, default NOUVELLE</td><td>État courant</td></tr>
+        <tr><td><code>prixEstime</code></td><td>BigDecimal</td><td>Nullable, ≥ 0</td><td>Prix estimé par l'employé</td></tr>
+        <tr><td><code>prixFinal</code></td><td>BigDecimal</td><td>Nullable, ≥ 0</td><td>Prix final (requis pour clôture)</td></tr>
+        <tr><td><code>rapportTechnique</code></td><td>String</td><td>Nullable, max 5000</td><td>Rapport technique détaillé</td></tr>
+        <tr><td><code>dateCreation</code></td><td>LocalDateTime</td><td>Auto, non modifiable</td><td>Date de création</td></tr>
+        <tr><td><code>dateCloture</code></td><td>LocalDateTime</td><td>Nullable</td><td>Date de clôture effective</td></tr>
+        <tr><td><code>dateModification</code></td><td>LocalDateTime</td><td>Auto</td><td>Dernière modification</td></tr>
+        <tr><td><code>client</code></td><td>Client</td><td>Non null, FK</td><td>Client demandeur</td></tr>
+        <tr><td><code>employeAffecte</code></td><td>Employe</td><td>Nullable, FK</td><td>Employé assigné</td></tr>
+      </table>
+      <table style="margin-top:-1px;">
+        <tr><th>Relations</th></tr>
+        <tr><td>ManyToOne → Client (obligatoire) · ManyToOne → Employe (nullable tant que "Nouvelle") · OneToMany → Commentaire · OneToMany → PieceJointe · OneToMany → HistoriqueIntervention</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">Commentaire</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>Long</td><td>PK, auto-généré</td><td>Identifiant unique</td></tr>
+        <tr><td><code>contenu</code></td><td>String</td><td>Non null, max 2000</td><td>Texte du commentaire</td></tr>
+        <tr><td><code>dateCreation</code></td><td>LocalDateTime</td><td>Auto, non modifiable</td><td>Date de création</td></tr>
+        <tr><td><code>intervention</code></td><td>Intervention</td><td>Non null, FK</td><td>Intervention concernée</td></tr>
+        <tr><td><code>auteur</code></td><td>Utilisateur</td><td>Non null, FK</td><td>Auteur du commentaire</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">PieceJointe</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>Long</td><td>PK, auto-généré</td><td>Identifiant unique</td></tr>
+        <tr><td><code>nomFichier</code></td><td>String</td><td>Non null, max 255</td><td>Nom original du fichier</td></tr>
+        <tr><td><code>cheminFichier</code></td><td>String</td><td>Non null, max 500</td><td>Chemin de stockage sur le serveur</td></tr>
+        <tr><td><code>typeFichier</code></td><td>String</td><td>Non null, max 100</td><td>Type MIME</td></tr>
+        <tr><td><code>tailleFichier</code></td><td>Long</td><td>Non null, > 0</td><td>Taille en octets</td></tr>
+        <tr><td><code>dateTelechargement</code></td><td>LocalDateTime</td><td>Auto</td><td>Date d'upload</td></tr>
+        <tr><td><code>intervention</code></td><td>Intervention</td><td>Non null, FK</td><td>Intervention associée</td></tr>
+        <tr><td><code>telechargePar</code></td><td>Utilisateur</td><td>Non null, FK</td><td>Utilisateur ayant uploadé</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">HistoriqueIntervention — audit métier champ par champ</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>Long</td><td>PK, auto-généré</td><td>Identifiant unique</td></tr>
+        <tr><td><code>champModifie</code></td><td>String</td><td>Non null, max 100</td><td>Nom du champ modifié (etat, priorite…)</td></tr>
+        <tr><td><code>ancienneValeur</code></td><td>String</td><td>Nullable, max 500</td><td>Valeur avant modification</td></tr>
+        <tr><td><code>nouvelleValeur</code></td><td>String</td><td>Non null, max 500</td><td>Valeur après modification</td></tr>
+        <tr><td><code>dateModification</code></td><td>LocalDateTime</td><td>Auto</td><td>Date du changement</td></tr>
+        <tr><td><code>intervention</code></td><td>Intervention</td><td>Non null, FK</td><td>Intervention concernée</td></tr>
+        <tr><td><code>modifiePar</code></td><td>Utilisateur</td><td>Non null, FK</td><td>Utilisateur ayant effectué le changement</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">JournalAudit — journal technique global</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>Long</td><td>PK, auto-généré</td><td>Identifiant unique</td></tr>
+        <tr><td><code>action</code></td><td>String</td><td>Non null, max 50</td><td>Type d'action (CREATION, MODIFICATION, SUPPRESSION, CONNEXION…)</td></tr>
+        <tr><td><code>typeEntite</code></td><td>String</td><td>Non null, max 100</td><td>Entité concernée (Intervention, Utilisateur…)</td></tr>
+        <tr><td><code>idEntite</code></td><td>Long</td><td>Nullable</td><td>ID de l'entité concernée</td></tr>
+        <tr><td><code>details</code></td><td>String</td><td>Nullable, max 2000</td><td>Détails de l'action (JSON)</td></tr>
+        <tr><td><code>adresseIp</code></td><td>String</td><td>Nullable, max 45</td><td>Adresse IP du client</td></tr>
+        <tr><td><code>dateAction</code></td><td>LocalDateTime</td><td>Auto</td><td>Date et heure de l'action</td></tr>
+        <tr><td><code>effectuePar</code></td><td>Utilisateur</td><td>Non null, FK</td><td>Utilisateur ayant effectué l'action</td></tr>
+      </table>
+    </div>
+
+    <div class="class-block">
+      <div class="class-title">HistoriqueConnexion</div>
+      <table>
+        <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+        <tr><td><code>id</code></td><td>Long</td><td>PK, auto-généré</td><td>Identifiant unique</td></tr>
+        <tr><td><code>adresseIp</code></td><td>String</td><td>Nullable, max 45</td><td>Adresse IP</td></tr>
+        <tr><td><code>navigateur</code></td><td>String</td><td>Nullable, max 255</td><td>User-Agent du navigateur</td></tr>
+        <tr><td><code>succes</code></td><td>boolean</td><td>Non null</td><td>Connexion réussie ou échouée</td></tr>
+        <tr><td><code>motifEchec</code></td><td>String</td><td>Nullable, max 200</td><td>Raison de l'échec le cas échéant</td></tr>
+        <tr><td><code>dateConnexion</code></td><td>LocalDateTime</td><td>Auto</td><td>Date et heure de la tentative</td></tr>
+        <tr><td><code>utilisateur</code></td><td>Utilisateur</td><td>Non null, FK</td><td>Utilisateur concerné</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="enums">
+    <h2>3. Énumérations</h2>
+    <div class="enum-grid">
+      <div>
+        <table>
+          <tr><th colspan="2">Role</th></tr>
+          <tr><td><code>DIRECTEUR</code></td><td>Administrateur principal du système</td></tr>
+          <tr><td><code>EMPLOYE_SAV</code></td><td>Technicien SAV</td></tr>
+          <tr><td><code>CLIENT</code></td><td>Client externe</td></tr>
+        </table>
+      </div>
+      <div>
+        <table>
+          <tr><th colspan="3">Priorite</th></tr>
+          <tr><th>Valeur</th><th>Description</th><th>Ordre</th></tr>
+          <tr><td><code>TRES_URGENT</code></td><td>Intervention critique</td><td>1 (plus haute)</td></tr>
+          <tr><td><code>URGENT</code></td><td>Intervention prioritaire</td><td>2</td></tr>
+          <tr><td><code>NORMAL</code></td><td>Priorité standard</td><td>3</td></tr>
+          <tr><td><code>FACULTATIF</code></td><td>Peut attendre</td><td>4 (plus basse)</td></tr>
+        </table>
+      </div>
+      <div>
+        <table>
+          <tr><th colspan="2">EtatIntervention</th></tr>
+          <tr><td><code>NOUVELLE</code></td><td>Demande créée, non encore traitée</td></tr>
+          <tr><td><code>AFFECTEE</code></td><td>Employé assigné par le directeur</td></tr>
+          <tr><td><code>EN_ATTENTE</code></td><td>Mise en pause (attente pièce, info…)</td></tr>
+          <tr><td><code>EN_COURS</code></td><td>Travail en cours par l'employé</td></tr>
+          <tr><td><code>TERMINEE</code></td><td>Clôturée avec rapport</td></tr>
+          <tr><td><code>ANNULEE</code></td><td>Annulée par le directeur</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="relations">
+    <h2>4. Résumé des Relations</h2>
+    <div class="card" style="overflow-x:auto;">
+      <table>
+        <tr><th>Relation</th><th>Type</th><th>Cardinalité</th><th>Description</th></tr>
+        <tr><td>Intervention → Client</td><td>ManyToOne</td><td>N..1</td><td>Chaque intervention appartient à un client</td></tr>
+        <tr><td>Intervention → Employe</td><td>ManyToOne</td><td>N..0..1</td><td>Une intervention peut être affectée à un employé</td></tr>
+        <tr><td>Intervention → Commentaire</td><td>OneToMany</td><td>1..N</td><td>Une intervention a 0 à N commentaires</td></tr>
+        <tr><td>Intervention → PieceJointe</td><td>OneToMany</td><td>1..N</td><td>Une intervention a 0 à N pièces jointes</td></tr>
+        <tr><td>Intervention → HistoriqueIntervention</td><td>OneToMany</td><td>1..N</td><td>Une intervention a 0 à N entrées d'historique</td></tr>
+        <tr><td>Commentaire → Utilisateur</td><td>ManyToOne</td><td>N..1</td><td>Chaque commentaire a un auteur</td></tr>
+        <tr><td>PieceJointe → Utilisateur</td><td>ManyToOne</td><td>N..1</td><td>Chaque pièce jointe a un uploadeur</td></tr>
+        <tr><td>HistoriqueIntervention → Utilisateur</td><td>ManyToOne</td><td>N..1</td><td>Chaque modification est tracée à un utilisateur</td></tr>
+        <tr><td>JournalAudit → Utilisateur</td><td>ManyToOne</td><td>N..1</td><td>Chaque action est tracée à un utilisateur</td></tr>
+        <tr><td>HistoriqueConnexion → Utilisateur</td><td>ManyToOne</td><td>N..1</td><td>Chaque connexion est liée à un utilisateur</td></tr>
+        <tr><td>Utilisateur ← Client</td><td>Héritage JOINED</td><td>—</td><td>Client hérite d'Utilisateur</td></tr>
+        <tr><td>Utilisateur ← Employe</td><td>Héritage JOINED</td><td>—</td><td>Employé hérite d'Utilisateur</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="decisions">
+    <h2>5. Décisions de Conception</h2>
+    <div class="note"><b>Héritage JOINED</b> — stratégie choisie pour Utilisateur → Client/Employe. Crée 3 tables (utilisateur, client, employe) avec clés étrangères : meilleur compromis normalisation/performance.</div>
+    <div class="note"><b>Séparation HistoriqueIntervention / JournalAudit</b> — l'historique trace les changements métier d'une intervention (champ par champ), tandis que le journal d'audit est global et technique. Les deux sont complémentaires.</div>
+    <div class="note"><b>BigDecimal pour les prix</b> — utilisé au lieu de Double pour éviter les erreurs d'arrondi en virgule flottante sur les montants financiers.</div>
+    <div class="note"><b>Le Directeur est un Employé</b> — modélisé comme un Employe avec le rôle DIRECTEUR, ce qui simplifie le modèle tout en conservant la distinction via l'enum Role.</div>
+  </section>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "base",
+    themeVariables: {
+      primaryColor: "#eef2ff",
+      primaryTextColor: "#1f2430",
+      primaryBorderColor: "#c7d2fe",
+      lineColor: "#94a3b8",
+      fontSize: "13px"
+    },
+    classDiagram: {
+      curve: "linear"
+    },
+    flowchart: {
+      curve: "linear",
+      nodeSpacing: 45,
+      rankSpacing: 90,
+      useMaxWidth: false
+    }
+  });
+</script>
+</body>
+</html>

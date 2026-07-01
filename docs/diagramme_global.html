@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Diagramme Global des Cas d'Utilisation — Système de Gestion SAV</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card-bg: #ffffff;
+    --text: #1f2430;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 28px 20px 60px;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+  }
+  .wrap {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 20px;
+    margin: 0 0 4px 0;
+  }
+  p.subtitle {
+    color: var(--muted);
+    margin: 0 0 20px 0;
+    font-size: 13.5px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    overflow-x: auto;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: flex-start;
+    min-width: 1800px;
+  }
+  .hint {
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Diagramme Global des Cas d'Utilisation — Système de Gestion SAV</h1>
+  <p class="subtitle">Vue d'ensemble de tous les acteurs et de leurs interactions avec le système. Faites défiler horizontalement si nécessaire.</p>
+
+  <div class="card">
+    <div class="mermaid">
+graph LR
+    subgraph Acteurs
+        DIR["🧑‍💼 Directeur"]
+        EMP["🔧 Employé SAV"]
+        CLI["👤 Client"]
+        SYS["⚙️ Système"]
+    end
+
+    subgraph AUTH["Authentification et Securite"]
+        UC1["Se connecter (JWT)"]
+        UC2["Se déconnecter"]
+        UC3["Activer le 2FA (TOTP)"]
+        UC4["Réinitialiser le mot de passe"]
+    end
+
+    subgraph USERS["Gestion des Utilisateurs"]
+        UC5["Créer un compte client"]
+        UC6["CRUD employés"]
+        UC7["Consulter les clients"]
+        UC8["Activer/Désactiver un compte"]
+        UC9["Modifier le profil"]
+    end
+
+    subgraph INTERV["Gestion des Interventions"]
+        UC10["Créer une demande"]
+        UC11["Consulter toutes les demandes"]
+        UC12["Consulter ses interventions"]
+        UC13["Affecter une intervention"]
+        UC14["Modifier la priorité"]
+        UC15["Modifier l'état"]
+        UC16["Ajouter un rapport technique"]
+        UC17["Ajouter/Modifier le prix"]
+        UC18["Ajouter un commentaire"]
+        UC19["Clôturer une intervention"]
+        UC20["Suivre l'avancement"]
+        UC21["Recherche multicritère"]
+    end
+
+    subgraph DOCS["Documents"]
+        UC22["Téléverser une pièce jointe"]
+        UC23["Télécharger une pièce jointe"]
+        UC24["Consulter le rapport final"]
+        UC25["Télécharger le rapport PDF"]
+    end
+
+    subgraph DASH["Tableau de Bord"]
+        UC26["Consulter les statistiques"]
+        UC27["Consulter le chiffre d affaires"]
+    end
+
+    subgraph AUTO["Systeme Automatique"]
+        UC28["Générer le code intervention"]
+        UC29["Envoyer notification e-mail"]
+        UC30["Journaliser les actions"]
+        UC31["Générer le rapport PDF"]
+    end
+
+    DIR --> UC1
+    DIR --> UC2
+    DIR --> UC6
+    DIR --> UC7
+    DIR --> UC8
+    DIR --> UC9
+    DIR --> UC11
+    DIR --> UC13
+    DIR --> UC14
+    DIR --> UC21
+    DIR --> UC26
+    DIR --> UC27
+
+    EMP --> UC1
+    EMP --> UC2
+    EMP --> UC9
+    EMP --> UC12
+    EMP --> UC15
+    EMP --> UC16
+    EMP --> UC17
+    EMP --> UC18
+    EMP --> UC19
+    EMP --> UC21
+    EMP --> UC22
+    EMP --> UC23
+
+    CLI --> UC1
+    CLI --> UC2
+    CLI --> UC3
+    CLI --> UC4
+    CLI --> UC5
+    CLI --> UC9
+    CLI --> UC10
+    CLI --> UC20
+    CLI --> UC22
+    CLI --> UC23
+    CLI --> UC24
+    CLI --> UC25
+
+    SYS --> UC28
+    SYS --> UC29
+    SYS --> UC30
+    SYS --> UC31
+    </div>
+    <p class="hint">4 acteurs (Directeur, Employé SAV, Client, Système) reliés à 31 cas d'utilisation regroupés en 6 catégories.</p>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "base",
+    themeVariables: {
+      primaryColor: "#eef2ff",
+      primaryTextColor: "#1f2430",
+      primaryBorderColor: "#c7d2fe",
+      lineColor: "#94a3b8",
+      fontSize: "14px"
+    },
+    flowchart: {
+      curve: "linear",
+      nodeSpacing: 45,
+      rankSpacing: 110,
+      useMaxWidth: false,
+      htmlLabels: true
+    }
+  });
+</script>
+</body>
+</html>

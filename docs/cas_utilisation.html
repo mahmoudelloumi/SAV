@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Diagrammes des Cas d'Utilisation — Système de Gestion SAV</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card-bg: #ffffff;
+    --text: #1f2430;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --border: #e5e7eb;
+    --dir: #fef3c7;
+    --dir-b: #f5d78e;
+    --emp: #dcfce7;
+    --emp-b: #a7e3bd;
+    --cli: #dbeafe;
+    --cli-b: #a9c9f7;
+    --sys: #ede9fe;
+    --sys-b: #cbbcf7;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+  }
+  header {
+    background: #111827;
+    color: #fff;
+    padding: 28px 24px 20px;
+  }
+  header h1 {
+    margin: 0 0 4px 0;
+    font-size: 22px;
+  }
+  header p {
+    margin: 0;
+    color: #b8c0cc;
+    font-size: 14px;
+  }
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  nav a {
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--text);
+    background: #f1f3f6;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  nav a:hover { background: #e5e9f0; }
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  section {
+    margin-bottom: 40px;
+    scroll-margin-top: 60px;
+  }
+  section h2 {
+    font-size: 18px;
+    margin: 0 0 4px 0;
+  }
+  section .desc {
+    color: var(--muted);
+    font-size: 13.5px;
+    margin: 0 0 16px 0;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    overflow-x: auto;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: center;
+    min-width: 600px;
+  }
+  .legend {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--card-bg);
+  }
+  table.uc-table td, table.uc-table th {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.uc-table th {
+    background: #f1f3f6;
+    width: 220px;
+  }
+  .uc-block {
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .uc-block > .uc-title {
+    background: #eef2ff;
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  table.matrix {
+    font-size: 12.5px;
+  }
+  table.matrix th, table.matrix td {
+    border: 1px solid var(--border);
+    padding: 6px 8px;
+    text-align: center;
+  }
+  table.matrix th {
+    background: #f1f3f6;
+  }
+  table.matrix td:first-child, table.matrix th:first-child {
+    text-align: left;
+  }
+  table.matrix tr:nth-child(even) {
+    background: #fafbfc;
+  }
+  .check { color: #16a34a; font-weight: 700; }
+  .dash { color: #cbd5e1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Diagrammes des Cas d'Utilisation — Système de Gestion SAV</h1>
+  <p>Vue d'ensemble des acteurs, de leurs interactions et des scénarios principaux</p>
+</header>
+
+<nav>
+  <a href="#global">Vue Globale</a>
+  <a href="#client">Client</a>
+  <a href="#employe">Employé SAV</a>
+  <a href="#directeur">Directeur</a>
+  <a href="#descriptions">Descriptions</a>
+  <a href="#matrice">Matrice</a>
+</nav>
+
+<div class="wrap">
+
+  <section id="global">
+    <h2>1. Diagramme Global</h2>
+    <p class="desc">Vue d'ensemble de tous les acteurs et de leurs interactions avec le système.</p>
+    <div class="card">
+      <div class="mermaid">
+graph LR
+    subgraph Acteurs
+        DIR["🧑‍💼 Directeur"]
+        EMP["🔧 Employé SAV"]
+        CLI["👤 Client"]
+        SYS["⚙️ Système"]
+    end
+
+    subgraph "Système de Gestion SAV"
+        subgraph "Authentification et Securite"
+            UC1["Se connecter (JWT)"]
+            UC2["Se déconnecter"]
+            UC3["Activer le 2FA (TOTP)"]
+            UC4["Réinitialiser le mot de passe"]
+        end
+
+        subgraph "Gestion des Utilisateurs"
+            UC5["Créer un compte client"]
+            UC6["CRUD employés"]
+            UC7["Consulter les clients"]
+            UC8["Activer/Désactiver un compte"]
+            UC9["Modifier le profil"]
+        end
+
+        subgraph "Gestion des Interventions"
+            UC10["Créer une demande"]
+            UC11["Consulter toutes les demandes"]
+            UC12["Consulter ses interventions"]
+            UC13["Affecter une intervention"]
+            UC14["Modifier la priorité"]
+            UC15["Modifier l'état"]
+            UC16["Ajouter un rapport technique"]
+            UC17["Ajouter/Modifier le prix"]
+            UC18["Ajouter un commentaire"]
+            UC19["Clôturer une intervention"]
+            UC20["Suivre l'avancement"]
+            UC21["Recherche multicritère"]
+        end
+
+        subgraph "Documents"
+            UC22["Téléverser une pièce jointe"]
+            UC23["Télécharger une pièce jointe"]
+            UC24["Consulter le rapport final"]
+            UC25["Télécharger le rapport PDF"]
+        end
+
+        subgraph "Tableau de Bord"
+            UC26["Consulter les statistiques"]
+            UC27["Consulter le chiffre d affaires"]
+        end
+
+        subgraph "Systeme Automatique"
+            UC28["Générer le code intervention"]
+            UC29["Envoyer notification e-mail"]
+            UC30["Journaliser les actions"]
+            UC31["Générer le rapport PDF"]
+        end
+    end
+
+    DIR --> UC1
+    DIR --> UC2
+    DIR --> UC6
+    DIR --> UC7
+    DIR --> UC8
+    DIR --> UC9
+    DIR --> UC11
+    DIR --> UC13
+    DIR --> UC14
+    DIR --> UC21
+    DIR --> UC26
+    DIR --> UC27
+
+    EMP --> UC1
+    EMP --> UC2
+    EMP --> UC9
+    EMP --> UC12
+    EMP --> UC15
+    EMP --> UC16
+    EMP --> UC17
+    EMP --> UC18
+    EMP --> UC19
+    EMP --> UC21
+    EMP --> UC22
+    EMP --> UC23
+
+    CLI --> UC1
+    CLI --> UC2
+    CLI --> UC3
+    CLI --> UC4
+    CLI --> UC5
+    CLI --> UC9
+    CLI --> UC10
+    CLI --> UC20
+    CLI --> UC22
+    CLI --> UC23
+    CLI --> UC24
+    CLI --> UC25
+
+    SYS --> UC28
+    SYS --> UC29
+    SYS --> UC30
+    SYS --> UC31
+      </div>
+    </div>
+  </section>
+
+  <section id="client">
+    <h2>2. Diagramme — Acteur : Client</h2>
+    <div class="card">
+      <div class="mermaid">
+graph TD
+    CLI["👤 Client"]
+
+    CLI --> UC_C1["Créer un compte<br/>(matricule fiscal + RNE)"]
+    CLI --> UC_C2["Se connecter (JWT + 2FA)"]
+    CLI --> UC_C3["Activer le 2FA (TOTP)"]
+    CLI --> UC_C4["Réinitialiser le mot de passe"]
+    CLI --> UC_C5["Modifier le profil"]
+    CLI --> UC_C6["Créer une demande d'intervention"]
+    CLI --> UC_C7["Suivre l'avancement"]
+    CLI --> UC_C8["Consulter le rapport final"]
+    CLI --> UC_C9["Télécharger le rapport PDF"]
+    CLI --> UC_C10["Téléverser une pièce jointe"]
+    CLI --> UC_C11["Télécharger une pièce jointe"]
+    CLI --> UC_C12["Se déconnecter"]
+
+    UC_C6 -.->|"include"| UC_SYS1["Générer le code SAV"]
+    UC_C6 -.->|"include"| UC_SYS2["Envoyer notification e-mail"]
+    UC_C9 -.->|"include"| UC_SYS3["Générer le rapport PDF"]
+      </div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--cli);border:1px solid var(--cli-b);"></span>Cas d'utilisation Client</span>
+        <span><span class="dot" style="background:var(--sys);border:1px solid var(--sys-b);"></span>Cas système (include)</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="employe">
+    <h2>3. Diagramme — Acteur : Employé SAV</h2>
+    <div class="card">
+      <div class="mermaid">
+graph TD
+    EMP["🔧 Employé SAV"]
+
+    EMP --> UC_E1["Se connecter (JWT)"]
+    EMP --> UC_E2["Consulter ses interventions affectées"]
+    EMP --> UC_E3["Modifier l'état d'une intervention"]
+    EMP --> UC_E4["Ajouter un rapport technique"]
+    EMP --> UC_E5["Ajouter / Modifier le prix"]
+    EMP --> UC_E6["Ajouter un commentaire"]
+    EMP --> UC_E7["Clôturer une intervention"]
+    EMP --> UC_E8["Téléverser une pièce jointe"]
+    EMP --> UC_E9["Télécharger une pièce jointe"]
+    EMP --> UC_E10["Recherche multicritère"]
+    EMP --> UC_E11["Modifier le profil"]
+    EMP --> UC_E12["Se déconnecter"]
+
+    UC_E3 -.->|"include"| UC_SYS1["Journaliser l'action"]
+    UC_E3 -.->|"include"| UC_SYS2["Notifier le client par e-mail"]
+    UC_E7 -.->|"include"| UC_SYS3["Générer le rapport PDF"]
+    UC_E7 -.->|"include"| UC_SYS1
+    UC_E7 -.->|"include"| UC_SYS2
+      </div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--emp);border:1px solid var(--emp-b);"></span>Cas d'utilisation Employé</span>
+        <span><span class="dot" style="background:var(--sys);border:1px solid var(--sys-b);"></span>Cas système (include)</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="directeur">
+    <h2>4. Diagramme — Acteur : Directeur</h2>
+    <div class="card">
+      <div class="mermaid">
+graph TD
+    DIR["🧑‍💼 Directeur"]
+
+    DIR --> UC_D1["Se connecter (JWT)"]
+    DIR --> UC_D2["CRUD employés SAV"]
+    DIR --> UC_D3["Consulter la liste des clients"]
+    DIR --> UC_D4["Activer / Désactiver un compte"]
+    DIR --> UC_D5["Consulter toutes les demandes"]
+    DIR --> UC_D6["Affecter une intervention à un employé"]
+    DIR --> UC_D7["Modifier la priorité d'une intervention"]
+    DIR --> UC_D8["Annuler une intervention"]
+    DIR --> UC_D9["Recherche multicritère"]
+    DIR --> UC_D10["Consulter les statistiques"]
+    DIR --> UC_D11["Consulter le chiffre d'affaires"]
+    DIR --> UC_D12["Consulter le journal des actions"]
+    DIR --> UC_D13["Consulter l'historique des connexions"]
+    DIR --> UC_D14["Modifier le profil"]
+    DIR --> UC_D15["Se déconnecter"]
+
+    UC_D6 -.->|"include"| UC_SYS1["Journaliser l'action"]
+    UC_D6 -.->|"include"| UC_SYS2["Notifier l'employé par e-mail"]
+    UC_D7 -.->|"include"| UC_SYS1
+    UC_D8 -.->|"include"| UC_SYS1
+    UC_D8 -.->|"include"| UC_SYS3["Notifier le client par e-mail"]
+      </div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--dir);border:1px solid var(--dir-b);"></span>Cas d'utilisation Directeur</span>
+        <span><span class="dot" style="background:var(--sys);border:1px solid var(--sys-b);"></span>Cas système (include)</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="descriptions">
+    <h2>5. Description Textuelle des Cas d'Utilisation Principaux</h2>
+
+    <div class="uc-block">
+      <div class="uc-title">UC-01 : Créer un compte client</div>
+      <table class="uc-table">
+        <tr><th>Acteur</th><td>Client</td></tr>
+        <tr><th>Préconditions</th><td>Aucune</td></tr>
+        <tr><th>Postconditions</th><td>Le compte est créé, le 2FA doit être activé à la première connexion</td></tr>
+        <tr><th>Scénario principal</th><td>
+          1. Le client accède au formulaire d'inscription<br>
+          2. Il saisit : nom, prénom, e-mail, mot de passe, téléphone, adresse, matricule fiscal, RNE<br>
+          3. Le système valide les données (unicité e-mail, matricule fiscal, RNE ; format mot de passe)<br>
+          4. Le système crée le compte avec le rôle CLIENT<br>
+          5. Le système envoie un e-mail de confirmation<br>
+          6. Le client est redirigé vers la page de connexion
+        </td></tr>
+        <tr><th>Scénario alternatif</th><td>
+          3a. E-mail/matricule/RNE déjà existant → message d'erreur<br>
+          3b. Mot de passe non conforme → message d'erreur avec règles
+        </td></tr>
+      </table>
+    </div>
+
+    <div class="uc-block">
+      <div class="uc-title">UC-02 : Se connecter avec 2FA</div>
+      <table class="uc-table">
+        <tr><th>Acteur</th><td>Client</td></tr>
+        <tr><th>Préconditions</th><td>Compte actif existant</td></tr>
+        <tr><th>Postconditions</th><td>Le client est authentifié et reçoit un token JWT</td></tr>
+        <tr><th>Scénario principal</th><td>
+          1. Le client saisit son e-mail et mot de passe<br>
+          2. Le système vérifie les identifiants<br>
+          3. Si le 2FA n'est pas encore activé → redirection vers l'activation (QR code TOTP)<br>
+          4. Si le 2FA est activé → le système demande le code TOTP<br>
+          5. Le client saisit le code depuis Google Authenticator<br>
+          6. Le système vérifie le code TOTP<br>
+          7. Le système génère un token JWT et le retourne<br>
+          8. La connexion est journalisée
+        </td></tr>
+        <tr><th>Scénario alternatif</th><td>
+          2a. Identifiants incorrects → message d'erreur (max 5 tentatives)<br>
+          6a. Code TOTP invalide → message d'erreur<br>
+          2b. Compte désactivé → message d'erreur
+        </td></tr>
+      </table>
+    </div>
+
+    <div class="uc-block">
+      <div class="uc-title">UC-03 : Créer une demande d'intervention</div>
+      <table class="uc-table">
+        <tr><th>Acteur</th><td>Client</td></tr>
+        <tr><th>Préconditions</th><td>Client authentifié</td></tr>
+        <tr><th>Postconditions</th><td>La demande est créée avec le code SAV généré, état = "Nouvelle"</td></tr>
+        <tr><th>Scénario principal</th><td>
+          1. Le client accède au formulaire de création<br>
+          2. Il saisit : description du problème, priorité souhaitée<br>
+          3. Il peut ajouter des pièces jointes (optionnel)<br>
+          4. Le système génère le code unique (SAV-AAAA-NNNNNN)<br>
+          5. Le système crée la demande avec état "Nouvelle" et date de création<br>
+          6. Le système envoie un e-mail de confirmation au client<br>
+          7. L'action est journalisée<br>
+          8. Le client est redirigé vers le suivi de sa demande
+        </td></tr>
+        <tr><th>Scénario alternatif</th><td>2a. Description vide → message d'erreur</td></tr>
+      </table>
+    </div>
+
+    <div class="uc-block">
+      <div class="uc-title">UC-04 : Affecter une intervention à un employé</div>
+      <table class="uc-table">
+        <tr><th>Acteur</th><td>Directeur</td></tr>
+        <tr><th>Préconditions</th><td>Intervention à l'état "Nouvelle"</td></tr>
+        <tr><th>Postconditions</th><td>L'intervention passe à l'état "Affectée", l'employé est notifié</td></tr>
+        <tr><th>Scénario principal</th><td>
+          1. Le directeur consulte les demandes à l'état "Nouvelle"<br>
+          2. Il sélectionne une intervention<br>
+          3. Il choisit un employé dans la liste<br>
+          4. Le système affecte l'employé et change l'état à "Affectée"<br>
+          5. Le système envoie un e-mail de notification à l'employé<br>
+          6. Le système envoie un e-mail au client informant de l'affectation<br>
+          7. L'action est journalisée avec l'historique
+        </td></tr>
+      </table>
+    </div>
+
+    <div class="uc-block">
+      <div class="uc-title">UC-05 : Clôturer une intervention</div>
+      <table class="uc-table">
+        <tr><th>Acteur</th><td>Employé SAV</td></tr>
+        <tr><th>Préconditions</th><td>Intervention à l'état "En cours", rapport technique et prix final renseignés</td></tr>
+        <tr><th>Postconditions</th><td>L'intervention passe à l'état "Terminée", le rapport PDF est généré</td></tr>
+        <tr><th>Scénario principal</th><td>
+          1. L'employé accède à l'intervention<br>
+          2. Il vérifie que le rapport technique est complet<br>
+          3. Il vérifie que le prix final est renseigné<br>
+          4. Il clique sur "Clôturer"<br>
+          5. Le système change l'état à "Terminée" et enregistre la date de clôture<br>
+          6. Le système génère le rapport PDF<br>
+          7. Le système envoie un e-mail au client avec le lien du rapport<br>
+          8. L'action est journalisée
+        </td></tr>
+        <tr><th>Scénario alternatif</th><td>
+          2a. Rapport technique manquant → message d'erreur<br>
+          3a. Prix final non renseigné → message d'erreur
+        </td></tr>
+      </table>
+    </div>
+
+    <div class="uc-block">
+      <div class="uc-title">UC-06 : Consulter les statistiques</div>
+      <table class="uc-table">
+        <tr><th>Acteur</th><td>Directeur</td></tr>
+        <tr><th>Préconditions</th><td>Directeur authentifié</td></tr>
+        <tr><th>Postconditions</th><td>Le tableau de bord s'affiche avec les données actualisées</td></tr>
+        <tr><th>Scénario principal</th><td>
+          1. Le directeur accède au tableau de bord<br>
+          2. Le système affiche : interventions par état, par priorité, CA global et par période, performance employés, évolution mensuelle, temps moyen de résolution<br>
+          3. Le directeur peut filtrer par période
+        </td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="matrice">
+    <h2>6. Matrice Acteur × Cas d'Utilisation</h2>
+    <div class="card" style="overflow-x:auto;">
+      <table class="matrix">
+        <tr>
+          <th>Cas d'utilisation</th><th>Directeur</th><th>Employé</th><th>Client</th><th>Système</th>
+        </tr>
+        <tr><td>Créer un compte</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Se connecter (JWT)</td><td class="check">✔</td><td class="check">✔</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Activer 2FA (TOTP)</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Réinitialiser mot de passe</td><td class="check">✔</td><td class="check">✔</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>CRUD employés</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Consulter clients</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Activer/Désactiver compte</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Modifier profil</td><td class="check">✔</td><td class="check">✔</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Créer demande intervention</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Consulter toutes les demandes</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Consulter ses interventions</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Suivre l'avancement</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Affecter intervention</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Modifier priorité</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Modifier état</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Ajouter rapport technique</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Ajouter/modifier prix</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Ajouter commentaire</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Clôturer intervention</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Annuler intervention</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Recherche multicritère</td><td class="check">✔</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Téléverser pièce jointe</td><td class="dash">—</td><td class="check">✔</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Télécharger pièce jointe</td><td class="check">✔</td><td class="check">✔</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Consulter rapport final</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Télécharger rapport PDF</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td><td class="dash">—</td></tr>
+        <tr><td>Consulter statistiques</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Consulter chiffre d'affaires</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Consulter journal actions</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Consulter historique connexions</td><td class="check">✔</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+        <tr><td>Générer code SAV</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td></tr>
+        <tr><td>Envoyer notification e-mail</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td></tr>
+        <tr><td>Journaliser les actions</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td></tr>
+        <tr><td>Générer rapport PDF</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✔</td></tr>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "base",
+    themeVariables: {
+      primaryColor: "#eef2ff",
+      primaryTextColor: "#1f2430",
+      primaryBorderColor: "#c7d2fe",
+      lineColor: "#94a3b8",
+      fontSize: "14px"
+    },
+    flowchart: {
+      curve: "basis",
+      htmlLabels: true
+    }
+  });
+</script>
+</body>
+</html>

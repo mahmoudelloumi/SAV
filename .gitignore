@@ -1,0 +1,19 @@
+# Build / dependances
+jdk21/
+**/target/
+node_modules/
+dist/
+.angular/
+
+# Fichiers envoyes par les utilisateurs (donnees personnelles)
+backend/uploads/
+
+# Secrets locaux
+backend/src/main/resources/application-secrets.properties
+
+# Logs / IDE / outils
+*.log
+.project
+.idea/
+.vscode/
+.agents/

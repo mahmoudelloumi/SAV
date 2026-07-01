@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Diagramme de Séquence — Cycle de vie d'une intervention</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.0/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card-bg: #ffffff;
+    --text: #1f2430;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 16px;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+  }
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+  }
+  p.subtitle {
+    color: var(--muted);
+    margin: 0 0 24px 0;
+    font-size: 14px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    overflow-x: auto;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: center;
+  }
+  .legend {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .steps {
+    margin-top: 28px;
+  }
+  .steps h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  .steps ol {
+    padding-left: 20px;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .steps b { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Diagramme de Séquence — Cycle de vie d'une intervention</h1>
+  <p class="subtitle">De la création de la demande par le client jusqu'à sa clôture et la notification finale.</p>
+
+  <div class="card">
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor C as Client
+    participant S as Système (API REST)
+    participant DB as PostgreSQL (BDD)
+    actor D as Directeur
+    actor E as Employé SAV
+
+    rect rgb(240, 248, 255)
+    note right of C: 1. Création de la Demande
+    C->>S: POST /api/interventions (Description, Priorité)
+    S->>DB: Appeler fonction generer_code_intervention()
+    DB-->>S: Retourne code (ex: SAV-2026-000001)
+    S->>DB: INSERT Intervention (Etat = NOUVELLE)
+    DB-->>S: Succès
+    S-->>C: 201 Created (Intervention créée)
+    S--)D: Envoi Notification e-mail (Nouvelle demande)
+    end
+
+    rect rgb(255, 250, 240)
+    note right of D: 2. Affectation de l'Intervention
+    D->>S: GET /api/interventions?etat=NOUVELLE
+    S->>DB: SELECT interventions
+    DB-->>S: Liste des interventions
+    S-->>D: 200 OK (Liste)
+    D->>S: PUT /api/interventions/{id}/affecter (employeId)
+    S->>DB: UPDATE Intervention (Etat = AFFECTEE, employe_id)
+    S->>DB: INSERT HistoriqueIntervention
+    S->>DB: INSERT JournalAudit
+    DB-->>S: Succès
+    S-->>D: 200 OK (Affectation réussie)
+    S--)E: Envoi Notification e-mail (Nouvelle affectation)
+    S--)C: Envoi Notification e-mail (Intervention prise en charge)
+    end
+
+    rect rgb(245, 255, 250)
+    note right of E: 3. Traitement par l'Employé
+    E->>S: GET /api/interventions/mes-affectations
+    S->>DB: SELECT interventions (employe_id)
+    DB-->>S: Liste de ses interventions
+    S-->>E: 200 OK (Liste)
+    E->>S: PUT /api/interventions/{id}/etat (Etat = EN_COURS)
+    S->>DB: UPDATE Intervention (Etat = EN_COURS)
+    S->>DB: INSERT HistoriqueIntervention
+    S-->>E: 200 OK
+    end
+
+    rect rgb(255, 240, 245)
+    note right of E: 4. Clôture de l'Intervention
+    E->>S: PUT /api/interventions/{id}/cloturer (Rapport, Prix)
+    S->>DB: UPDATE Intervention (Etat = TERMINEE, Rapport, Prix, DateCloture)
+    S->>DB: INSERT HistoriqueIntervention
+    DB-->>S: Succès
+    S->>S: Génération du Rapport en PDF
+    S->>DB: INSERT PieceJointe (Lien PDF)
+    S-->>E: 200 OK (Intervention clôturée)
+    S--)C: Envoi Notification e-mail avec lien du PDF
+    end
+
+    rect rgb(248, 248, 255)
+    note right of C: 5. Consultation par le Client
+    C->>S: GET /api/interventions/{id}/pdf
+    S->>DB: SELECT PieceJointe (Rapport PDF)
+    DB-->>S: Informations Fichier
+    S-->>C: 200 OK (Téléchargement PDF)
+    end
+    </div>
+
+    <div class="legend">
+      <span><span class="dot" style="background:#eaf4ff;border:1px solid #b6d9ff;"></span>Création</span>
+      <span><span class="dot" style="background:#fff7e6;border:1px solid #ffe0a3;"></span>Affectation</span>
+      <span><span class="dot" style="background:#eafff5;border:1px solid #a8e6c8;"></span>Traitement</span>
+      <span><span class="dot" style="background:#ffeef2;border:1px solid #ffc2d1;"></span>Clôture</span>
+      <span><span class="dot" style="background:#f2f2ff;border:1px solid #d0d0ff;"></span>Consultation</span>
+    </div>
+  </div>
+
+  <div class="steps">
+    <h2>Description du scénario</h2>
+    <ol>
+      <li><b>Création</b> : le client crée une demande. L'API génère un code métier (SAV-YYYY-NNNNNN), enregistre l'intervention à l'état <i>NOUVELLE</i> et notifie le directeur.</li>
+      <li><b>Affectation</b> : le directeur consulte les nouvelles demandes et affecte un employé. L'état passe à <i>AFFECTEE</i>, l'action est journalisée et l'employé/client sont notifiés.</li>
+      <li><b>Traitement</b> : l'employé consulte ses affectations et passe l'intervention à l'état <i>EN_COURS</i>.</li>
+      <li><b>Clôture</b> : l'employé renseigne le rapport et le prix, l'état passe à <i>TERMINEE</i>, un PDF est généré et le client est notifié.</li>
+      <li><b>Consultation</b> : le client télécharge le rapport PDF de son intervention terminée.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "base",
+    themeVariables: {
+      primaryColor: "#eef2ff",
+      primaryTextColor: "#1f2430",
+      primaryBorderColor: "#c7d2fe",
+      lineColor: "#94a3b8",
+      actorBorder: "#2563eb",
+      actorBkg: "#eff6ff",
+      actorTextColor: "#1f2430",
+      signalColor: "#334155",
+      signalTextColor: "#1f2430",
+      noteBkgColor: "#fff7e6",
+      noteBorderColor: "#f0d9a8",
+      noteTextColor: "#1f2430"
+    },
+    sequence: {
+      showSequenceNumbers: true,
+      wrap: true,
+      width: 170
+    }
+  });
+</script>
+</body>
+</html>
