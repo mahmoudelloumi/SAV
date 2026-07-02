@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+/* Bascule de thème manuelle : la classe .dark est posée sur <html>
+   par ThemeContext (voir src/context/ThemeContext.jsx). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', 'Poppins', system-ui, sans-serif;
+  --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
+
+  /* Couleur de marque ID SOFT */
+  --color-brand-50: #fff4e6;
+  --color-brand-100: #ffe4bf;
+  --color-brand-200: #ffca85;
+  --color-brand-300: #ffab4d;
+  --color-brand-400: #ff8f1f;
+  --color-brand-500: #ff7a00;
+  --color-brand-600: #e56600;
+  --color-brand-700: #bf5300;
+  --color-brand-800: #994300;
+  --color-brand-900: #7a3600;
+
+  --color-dark-bg: #0f172a;
+  --color-dark-card: #1e293b;
+  --color-light-bg: #ffffff;
+  --color-light-card: #f8fafc;
+
+  --shadow-soft: 0 4px 24px -4px rgba(0, 0, 0, 0.08);
+  --shadow-soft-dark: 0 4px 24px -4px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 0 1px rgba(255, 122, 0, 0.15), 0 8px 24px -8px rgba(255, 122, 0, 0.4);
+
+  --animate-fade-in: fade-in 0.4s ease-out;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-light-bg text-slate-900 dark:bg-dark-bg dark:text-slate-100 font-sans transition-colors duration-300;
+  }
+
+  ::selection {
+    @apply bg-brand-500/30;
+  }
+
+  /* Scrollbar fine et discrète, cohérente avec le look premium */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  }
+}
