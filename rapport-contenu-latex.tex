@@ -1,0 +1,411 @@
+%=========================================================
+%  CONTENU DU RAPPORT — Application SAV enrichie par l'IA
+%  À coller dans le template ENIS (chapitres + intro + conclusion)
+%=========================================================
+
+%---------------------------------------------------------
+% INTRODUCTION GÉNÉRALE  (à mettre dans 004-chapter0-introduction.tex)
+%---------------------------------------------------------
+\chapter*{Introduction générale}
+\addcontentsline{toc}{chapter}{Introduction générale}
+\markboth{\MakeUppercase{Introduction générale}}{Introduction générale}
+
+Dans un environnement économique de plus en plus concurrentiel, la qualité du Service Après-Vente (SAV) est devenue un facteur déterminant de la satisfaction et de la fidélisation des clients. Un SAV efficace se traduit par une prise en charge rapide des demandes, un suivi transparent des interventions et une communication fluide entre le client et les techniciens. Or, de nombreuses organisations gèrent encore ce service à l'aide d'outils dispersés — courriels, tableurs, appels téléphoniques — ce qui engendre des pertes d'information, des délais et un manque de traçabilité.
+
+C'est dans ce contexte que s'inscrit mon stage d'été, dont l'objectif est de concevoir et développer une application web centralisée dédiée à la gestion des interventions SAV. Cette application vise à couvrir l'ensemble du processus, depuis la création d'une demande par le client jusqu'à sa clôture par le technicien, tout en offrant au directeur une vision globale de l'activité à travers un tableau de bord statistique.
+
+Au-delà de la digitalisation du processus, ce projet met l'accent sur l'apport de l'\textbf{Intelligence Artificielle} pour rendre l'application plus intelligente et plus proactive. L'intégration d'un modèle de langage local permet d'assister le client via un chatbot, de classer automatiquement les demandes, de proposer le meilleur technicien pour chaque intervention et d'aider à la rédaction des rapports. Cette dimension constitue la valeur ajoutée principale du travail réalisé.
+
+Ce rapport est organisé en quatre chapitres. Le \textbf{premier chapitre} présente le cadre général du projet : l'organisme d'accueil, le contexte, la problématique et les objectifs. Le \textbf{deuxième chapitre} est consacré à l'étude préalable et à la spécification des besoins fonctionnels et non fonctionnels. Le \textbf{troisième chapitre} décrit la conception de l'application (architecture, base de données, sécurité). Enfin, le \textbf{quatrième chapitre} détaille la réalisation, en insistant sur l'intégration des fonctionnalités d'Intelligence Artificielle. Le rapport se termine par une conclusion générale et les perspectives d'évolution.
+
+
+%---------------------------------------------------------
+% CHAPITRE 1  (à mettre dans 004-chapter1.tex)
+%---------------------------------------------------------
+\chapter{Cadre général du projet}
+
+\section{Introduction}
+Ce premier chapitre a pour but de situer le projet dans son contexte. Il présente l'organisme d'accueil, expose la problématique à l'origine du besoin, précise les objectifs assignés au stage et décrit la méthodologie de travail adoptée.
+
+\section{Présentation de l'organisme d'accueil}
+Le stage s'est déroulé au sein de \textbf{[ Nom de l'entreprise ]}, une entreprise spécialisée dans \textbf{[ domaine d'activité ]}. \textbf{[ Décrire ici en quelques lignes l'entreprise : sa taille, ses activités principales, ses clients, son organisation. ]}
+
+Dans le cadre de son activité, l'entreprise assure un service après-vente auprès de ses clients, ce qui implique la réception, le traitement et le suivi d'un volume important de demandes d'intervention. La gestion efficace de ce service constitue un enjeu direct pour la satisfaction client, ce qui a motivé le présent projet.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{example-image}
+  \caption{Logo / organigramme de l'entreprise d'accueil}
+  \label{fig:entreprise}
+\end{figure}
+
+\section{Contexte et problématique}
+Avant ce projet, la gestion du SAV reposait sur des moyens classiques et peu structurés. Cette situation présentait plusieurs limites :
+\begin{itemize}
+  \item \textbf{Dispersion de l'information} : les demandes arrivaient par différents canaux (téléphone, e-mail, oral), sans centralisation.
+  \item \textbf{Manque de traçabilité} : il était difficile de connaître l'état d'avancement d'une intervention et l'historique des actions réalisées.
+  \item \textbf{Affectation manuelle} : la répartition des interventions se faisait de façon empirique, sans tenir compte de la charge réelle des techniciens.
+  \item \textbf{Absence d'indicateurs} : la direction ne disposait pas d'outils de pilotage (statistiques, chiffre d'affaires, performance).
+  \item \textbf{Faible autonomie du client} : le client ne pouvait ni suivre sa demande, ni obtenir une première assistance sans contacter le service.
+\end{itemize}
+
+La problématique centrale peut donc se formuler ainsi : \textbf{comment concevoir une solution logicielle centralisée, sécurisée et intelligente, capable d'automatiser et de fiabiliser l'ensemble du processus de gestion des interventions SAV ?}
+
+\section{Objectifs du projet}
+Pour répondre à cette problématique, les objectifs suivants ont été fixés :
+\begin{enumerate}
+  \item Centraliser la gestion des demandes d'intervention au sein d'une application web unique.
+  \item Modéliser et automatiser le cycle de vie complet d'une intervention, de la création à la clôture.
+  \item Distinguer et sécuriser les accès selon trois rôles : client, employé SAV et directeur.
+  \item Offrir au directeur un tableau de bord de pilotage avec des statistiques en temps réel.
+  \item Enrichir l'application par des fonctionnalités d'Intelligence Artificielle.
+\end{enumerate}
+
+\section{Méthodologie de travail}
+Le développement a suivi une démarche \textbf{agile et itérative}, inspirée de la méthode Scrum. Le travail a été découpé en itérations courtes, chacune aboutissant à un incrément fonctionnel testé et validé. Cette approche a permis d'intégrer les fonctionnalités d'IA de manière incrémentale, une fois le cœur applicatif stabilisé. Un outil de gestion de versions (\textbf{Git}) a été utilisé tout au long du projet.
+
+\section{Conclusion}
+Ce chapitre a présenté le contexte du projet, la problématique liée à la gestion traditionnelle du SAV et les objectifs visés. Le chapitre suivant approfondit l'étude des besoins.
+
+
+%---------------------------------------------------------
+% CHAPITRE 2  (à mettre dans chapter2.tex)
+%---------------------------------------------------------
+\chapter{Étude préalable et spécification des besoins}
+
+\section{Introduction}
+Ce chapitre présente l'étude préalable du projet. Après une analyse de l'existant et de ses limites, il détaille la solution proposée puis spécifie les besoins fonctionnels et non fonctionnels, ainsi que les acteurs du système.
+
+\section{Étude et critique de l'existant}
+La gestion du SAV s'appuyait sur des outils bureautiques et des échanges informels. L'analyse fait ressortir les insuffisances suivantes : absence de base de données centralisée, suivi manuel sujet à erreurs, communication peu structurée entre les acteurs, et impossibilité de produire des indicateurs fiables. Ces constats justifient le développement d'une solution dédiée.
+
+\section{Solution proposée}
+La solution retenue est une \textbf{application web} accessible depuis un navigateur, sans installation côté client. Elle centralise l'ensemble des données dans une base unique et propose à chaque acteur une interface adaptée à son rôle. Le processus d'intervention y est entièrement modélisé sous forme d'un cycle d'états. À cette base fonctionnelle s'ajoute une couche d'Intelligence Artificielle destinée à assister les utilisateurs et à automatiser certaines tâches à forte valeur ajoutée.
+
+\section{Identification des acteurs}
+Le système fait intervenir trois acteurs principaux, aux responsabilités distinctes :
+
+\begin{table}[H]
+\centering
+\caption{Acteurs du système et leurs responsabilités}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Acteur} & \textbf{Rôle et responsabilités} \\
+\midrule
+Client & Crée des demandes d'intervention, suit leur avancement, échange via l'assistant, confirme et consulte ses interventions. \\
+Employé SAV (technicien) & Traite les interventions affectées, met à jour leur état, ajoute des commentaires et rédige le rapport de clôture. \\
+Directeur & Gère les comptes employés, affecte les interventions, supervise l'activité et consulte le tableau de bord statistique. \\
+\bottomrule
+\end{tabularx}
+\label{tab:acteurs}
+\end{table}
+
+\section{Besoins fonctionnels}
+Les besoins fonctionnels décrivent les services que l'application doit rendre. Ils sont organisés par acteur.
+
+\subsection{Besoins communs}
+\begin{itemize}
+  \item S'authentifier de manière sécurisée (avec double authentification optionnelle).
+  \item Gérer son profil et réinitialiser son mot de passe.
+  \item Recevoir des notifications sur l'évolution des interventions.
+\end{itemize}
+
+\subsection{Besoins du client}
+\begin{itemize}
+  \item Créer une demande d'intervention en décrivant le problème et en joignant des photos.
+  \item Suivre en temps réel l'état de ses demandes.
+  \item Dialoguer avec un assistant virtuel pour obtenir de l'aide ou créer une demande.
+  \item Confirmer une intervention à l'aide d'un code reçu par e-mail.
+\end{itemize}
+
+\subsection{Besoins de l'employé SAV}
+\begin{itemize}
+  \item Consulter les interventions qui lui sont affectées.
+  \item Accepter une intervention et faire évoluer son état (en cours, en attente, terminée…).
+  \item Ajouter des commentaires et des pièces jointes au dossier d'intervention.
+  \item Rédiger le rapport technique de clôture, avec une aide à la rédaction par l'IA.
+\end{itemize}
+
+\subsection{Besoins du directeur}
+\begin{itemize}
+  \item Gérer les comptes des employés (création, modification, désactivation).
+  \item Affecter les interventions aux techniciens, assisté par une suggestion intelligente.
+  \item Consulter un tableau de bord : interventions par état et par priorité, chiffre d'affaires, performance des employés, évolutions temporelles.
+  \item Alimenter une base de connaissances exploitée par l'assistant.
+\end{itemize}
+
+\section{Besoins non fonctionnels}
+Au-delà des services rendus, l'application doit respecter un ensemble d'exigences de qualité :
+
+\begin{table}[H]
+\centering
+\caption{Besoins non fonctionnels}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Exigence} & \textbf{Description} \\
+\midrule
+Sécurité & Authentification JWT, double authentification TOTP, mots de passe chiffrés (BCrypt), contrôle d'accès par rôle. \\
+Ergonomie & Interface moderne, responsive (mobile et bureau), avec thème clair/sombre. \\
+Performance & Temps de réponse rapides ; traitements d'IA exécutés localement pour éviter la latence externe. \\
+Fiabilité & Traçabilité des actions (historique et journal d'audit), gestion cohérente des transitions d'état. \\
+Confidentialité & Données et échanges avec l'IA traités en local, sans transmission à un service tiers. \\
+Maintenabilité & Architecture en couches, code structuré et documenté, séparation des responsabilités. \\
+\bottomrule
+\end{tabularx}
+\label{tab:bnf}
+\end{table}
+
+\section{Diagramme des cas d'utilisation}
+Le diagramme des cas d'utilisation global synthétise les interactions entre les acteurs et le système. Il met en évidence les cas d'utilisation propres à chaque rôle ainsi que les cas partagés (authentification, notifications).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Diagramme de cas d'utilisation global}
+  \label{fig:usecase}
+\end{figure}
+
+\section{Conclusion}
+Ce chapitre a formalisé les besoins auxquels l'application doit répondre. Ces spécifications servent de fondement à la phase de conception présentée dans le chapitre suivant.
+
+
+%---------------------------------------------------------
+% CHAPITRE 3  (à mettre dans chapter3.tex)
+%---------------------------------------------------------
+\chapter{Conception}
+
+\section{Introduction}
+Ce chapitre décrit la conception de l'application. Il présente l'architecture générale et technique retenue, la modélisation des données, le cycle de vie d'une intervention et les mécanismes de sécurité.
+
+\section{Architecture générale}
+L'application adopte une architecture \textbf{trois-tiers} (client — serveur — base de données), qui sépare clairement la présentation, la logique métier et le stockage des données. Cette séparation favorise la maintenabilité, la sécurité et l'évolutivité du système.
+\begin{itemize}
+  \item \textbf{Couche présentation} : une application web monopage (SPA) développée avec React, exécutée dans le navigateur du client.
+  \item \textbf{Couche métier} : une API REST développée avec Spring Boot, qui expose les services et applique les règles de gestion.
+  \item \textbf{Couche données} : une base de données relationnelle PostgreSQL, accédée via le mapping objet-relationnel Hibernate/JPA.
+  \item \textbf{Couche IA} : un serveur de modèle de langage Ollama, exécuté localement et sollicité par l'API pour les traitements intelligents.
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Architecture générale trois-tiers de l'application}
+  \label{fig:archi}
+\end{figure}
+
+\section{Architecture technique et logique}
+Côté serveur, l'application suit une organisation en couches rigoureuse : les \textbf{contrôleurs} reçoivent et valident les requêtes HTTP, les \textbf{services} portent la logique métier, et les \textbf{repositories} assurent la persistance. Les objets de transfert (DTO) isolent le modèle interne des données échangées avec le client. La communication entre le frontend et le backend s'effectue via des échanges au format \textbf{JSON} sur des points d'accès REST.
+
+\section{Conception de la base de données}
+Le modèle de données a été conçu autour de l'entité centrale \textbf{Intervention}, reliée aux utilisateurs (clients et employés) et aux objets qui documentent son traitement. Les principales entités sont décrites ci-dessous.
+
+\begin{table}[H]
+\centering
+\caption{Principales entités du modèle de données}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Entité} & \textbf{Description} \\
+\midrule
+Utilisateur & Classe de base des comptes ; spécialisée en Client et Employé, portant le rôle et les informations d'authentification. \\
+Client & Personne ou société émettrice des demandes d'intervention. \\
+Employé & Technicien SAV, caractérisé par un code, une spécialité et les interventions affectées. \\
+Intervention & Demande de service : description, priorité, catégorie, état, prix, dates et rapport technique. \\
+Commentaire & Message associé à une intervention, pour le suivi et la communication. \\
+Pièce jointe & Fichier (photo, document) rattaché à une intervention. \\
+Historique d'intervention & Trace des changements d'état et des modifications d'une intervention. \\
+Base de connaissances & Ensemble d'articles alimentant l'assistant pour répondre au client. \\
+Journal d'audit & Enregistrement des actions sensibles à des fins de traçabilité. \\
+\bottomrule
+\end{tabularx}
+\label{tab:entites}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{example-image}
+  \caption{Diagramme de classes / modèle entité-association}
+  \label{fig:classes}
+\end{figure}
+
+\section{Cycle de vie d'une intervention}
+Le cœur métier de l'application est la modélisation du cycle de vie d'une intervention sous forme d'une machine à états. Chaque intervention passe par une succession d'états contrôlés, garantissant la cohérence du processus.
+
+\begin{table}[H]
+\centering
+\caption{États du cycle de vie d'une intervention}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{État} & \textbf{Signification} \\
+\midrule
+NOUVELLE & Demande créée par le client, en attente de traitement. \\
+AFFECTEE & Demande affectée à un employé par le directeur. \\
+ACCEPTEE & Intervention acceptée par l'employé désigné. \\
+EN\_COURS & Traitement en cours par le technicien. \\
+EN\_ATTENTE & En attente de pièces, de validation ou d'une information. \\
+TERMINEE & Intervention clôturée (réparée / facturée). \\
+ANNULEE & Intervention annulée. \\
+\bottomrule
+\end{tabularx}
+\label{tab:etats}
+\end{table}
+
+Les transitions entre ces états sont encadrées par des règles métier : seules les transitions valides sont autorisées, et chaque changement est historisé. La priorité peut prendre les valeurs \textbf{Très urgent, Urgent, Normal} et \textbf{Facultatif}, tandis que la catégorie technique (logiciel, matériel, réseau, installation, maintenance, autre) permet un classement des demandes.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Diagramme d'états-transitions d'une intervention}
+  \label{fig:etats}
+\end{figure}
+
+\section{Conception de la sécurité}
+La sécurité constitue une exigence forte du projet. Elle repose sur plusieurs mécanismes complémentaires :
+\begin{itemize}
+  \item \textbf{Authentification par jeton JWT} : après connexion, un jeton signé est joint à chaque requête, permettant une architecture sans état côté serveur.
+  \item \textbf{Double authentification (TOTP)} : un second facteur, basé sur un code temporel, renforce la protection des comptes.
+  \item \textbf{Chiffrement des mots de passe} : les mots de passe sont stockés sous forme d'empreintes BCrypt.
+  \item \textbf{Contrôle d'accès par rôle} : chaque point d'accès de l'API est protégé selon le rôle de l'utilisateur.
+  \item \textbf{Journalisation} : les connexions et les actions sensibles sont enregistrées pour assurer la traçabilité.
+\end{itemize}
+
+\section{Conclusion}
+Ce chapitre a présenté les choix de conception structurants : architecture en couches, modèle de données centré sur l'intervention, cycle d'états maîtrisé et sécurité multi-niveaux. Le chapitre suivant décrit la réalisation.
+
+
+%---------------------------------------------------------
+% CHAPITRE 4  (à mettre dans chapter4.tex)
+%---------------------------------------------------------
+\chapter{Réalisation et intégration de l'Intelligence Artificielle}
+
+\section{Introduction}
+Ce chapitre présente la réalisation de l'application. Il décrit d'abord l'environnement de développement et les technologies utilisées, puis les principales fonctionnalités mises en œuvre, avant de détailler la contribution majeure du stage : l'intégration de l'Intelligence Artificielle.
+
+\section{Environnement de développement}
+\subsection{Technologies et langages}
+\begin{table}[H]
+\centering
+\caption{Technologies utilisées}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Élément} & \textbf{Technologie} \\
+\midrule
+Frontend & React 18, Vite, Tailwind CSS, React Router, Recharts, Framer Motion \\
+Backend & Java 21, Spring Boot 3.4, Spring Security, Spring Data JPA (Hibernate) \\
+Base de données & PostgreSQL \\
+Intelligence Artificielle & Ollama (modèle de langage exécuté localement) \\
+Sécurité & JWT (JJWT), TOTP, BCrypt \\
+Documentation d'API & Swagger / OpenAPI \\
+Outils & Git, Maven, Node.js / npm, Eclipse / VS Code \\
+\bottomrule
+\end{tabularx}
+\label{tab:techno}
+\end{table}
+
+\subsection{Choix d'une IA locale}
+Le choix s'est porté sur \textbf{Ollama}, qui permet d'exécuter des modèles de langage directement sur la machine, plutôt que sur une API en ligne payante. Ce choix présente trois avantages déterminants : la \textbf{gratuité}, la \textbf{confidentialité} (les données des clients ne quittent jamais l'infrastructure) et l'\textbf{autonomie} (fonctionnement sans dépendance à un service externe). Le backend communique avec Ollama via des requêtes locales et exploite un format de réponse structuré (JSON).
+
+\section{Fonctionnalités réalisées}
+L'application offre à chaque rôle un espace de travail dédié, accessible après authentification.
+
+\subsection{Espace client}
+Le client dispose d'un tableau de bord synthétique, d'un formulaire de création de demande (avec ajout de photos) et d'un suivi en temps réel de ses interventions. Un assistant conversationnel est disponible en permanence pour l'aider.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Tableau de bord du client}
+  \label{fig:client}
+\end{figure}
+
+\subsection{Espace employé (technicien)}
+Le technicien accède à la liste des interventions qui lui sont affectées, fait évoluer leur état, ajoute des commentaires et des pièces jointes, puis rédige le rapport de clôture avec l'aide de l'IA.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Liste des interventions affectées à un technicien}
+  \label{fig:employe}
+\end{figure}
+
+\subsection{Espace directeur}
+Le directeur pilote l'activité : gestion des employés, affectation des interventions et consultation d'un tableau de bord riche en indicateurs (répartition par état et par priorité, chiffre d'affaires, performance des employés, évolutions temporelles).
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Tableau de bord statistique du directeur}
+  \label{fig:directeur}
+\end{figure}
+
+\section{Intégration de l'Intelligence Artificielle}
+L'Intelligence Artificielle a été intégrée à plusieurs points clés du parcours utilisateur, de manière à accompagner l'application tout au long du cycle de vie d'une intervention. Cinq fonctionnalités ont été développées.
+
+\subsection{Assistant conversationnel (chatbot)}
+Un chatbot est mis à la disposition du client sous la forme d'une bulle flottante. Le client y décrit son problème en langage naturel ; l'assistant tente d'abord de le dépanner à l'aide de la base de connaissances, puis, si nécessaire, propose de créer une demande d'intervention \textbf{pré-remplie} (description et priorité déduites de la conversation). L'assistant est décliné en plusieurs variantes : pour le client connecté, pour les visiteurs du site et pour le directeur (interrogation des données de l'activité).
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Assistant conversationnel intégré à l'espace client}
+  \label{fig:chatbot}
+\end{figure}
+
+\subsection{Classification automatique des demandes}
+À la création d'une demande, l'IA analyse la description saisie par le client et propose automatiquement une \textbf{priorité} et une \textbf{catégorie} technique (logiciel, matériel, réseau, etc.). Cette classification fait gagner du temps au traitement et améliore la cohérence du tri des interventions.
+
+\subsection{Affectation intelligente des techniciens}
+Lorsqu'il doit affecter une intervention, le directeur reçoit une \textbf{suggestion du meilleur technicien}, calculée à partir de la charge de travail active de chaque employé et de son historique d'interventions terminées, puis assortie d'une justification. Le directeur conserve la décision finale : l'IA propose, l'humain dispose. Cette fonctionnalité équilibre la charge entre techniciens et valorise l'expérience.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{example-image}
+  \caption{Suggestion d'affectation du meilleur technicien}
+  \label{fig:affectation}
+\end{figure}
+
+\subsection{Aide à la rédaction du rapport de clôture}
+Au moment de clôturer une intervention, le technicien peut demander à l'IA de \textbf{générer un rapport technique} professionnel à partir du problème signalé et de ses notes. Le texte proposé peut ensuite être relu et ajusté, ce qui améliore la qualité et l'homogénéité des rapports transmis aux clients.
+
+\subsection{Reformulation et base de connaissances}
+Deux fonctionnalités complètent le dispositif : la \textbf{reformulation} assistée de la description d'un problème, et une \textbf{base de connaissances} administrable qui alimente l'assistant en réponses fiables et empêche l'IA d'inventer des informations non vérifiées.
+
+\section{Synthèse des apports de l'IA}
+\begin{table}[H]
+\centering
+\caption{Synthèse des fonctionnalités d'Intelligence Artificielle}
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Fonctionnalité IA} & \textbf{Bénéfice apporté} \\
+\midrule
+Chatbot d'assistance & Autonomie du client, réduction des sollicitations, création guidée des demandes. \\
+Classification automatique & Tri cohérent et rapide des interventions par priorité et catégorie. \\
+Affectation intelligente & Répartition équilibrée de la charge, meilleure adéquation technicien / problème. \\
+Aide au rapport de clôture & Rapports plus complets, homogènes et professionnels. \\
+Reformulation \& base de connaissances & Demandes plus claires, réponses fiables, réduction des erreurs. \\
+\bottomrule
+\end{tabularx}
+\label{tab:synthese-ia}
+\end{table}
+
+\section{Conclusion}
+Ce chapitre a présenté la réalisation de l'application et, surtout, l'intégration de l'Intelligence Artificielle qui en constitue la valeur ajoutée. Les cinq fonctionnalités développées interviennent à chaque étape du parcours et rendent l'outil plus proactif, plus efficace et plus agréable à utiliser.
+
+
+%---------------------------------------------------------
+% CONCLUSION GÉNÉRALE  (remplace le bloc \chapter*{Conclusion générale})
+%---------------------------------------------------------
+% \chapter*{Conclusion générale}
+% \markboth{\MakeUppercase{Conclusion générale}}{Conclusion générale}
+
+Ce stage d'été a été consacré à la conception et au développement d'une application web de gestion du Service Après-Vente, enrichie par l'Intelligence Artificielle. L'objectif initial — centraliser, sécuriser et automatiser le processus de gestion des interventions — a été atteint : l'application couvre aujourd'hui l'ensemble du cycle de vie d'une intervention, du dépôt de la demande par le client jusqu'à sa clôture, en passant par l'affectation et le suivi.
+
+Sur le plan technique, le projet m'a permis de mettre en pratique une architecture moderne et complète : un frontend React réactif, une API REST Spring Boot structurée en couches, une base de données PostgreSQL et une sécurité robuste fondée sur JWT et la double authentification. La contribution la plus significative reste l'intégration d'un modèle de langage local (Ollama), qui apporte cinq fonctionnalités intelligentes : assistant conversationnel, classification automatique, affectation intelligente des techniciens, aide à la rédaction des rapports et base de connaissances.
+
+Au-delà des compétences techniques, ce stage a été une expérience formatrice sur le plan professionnel. Il m'a appris à analyser un besoin réel, à organiser mon travail de manière itérative, à faire des choix d'architecture justifiés et à intégrer une technologie émergente — l'IA générative — de façon utile et maîtrisée, dans le respect de la confidentialité des données.
+
+Plusieurs pistes d'amélioration peuvent prolonger ce travail :
+\begin{itemize}
+  \item \textbf{Application mobile} pour les techniciens sur le terrain.
+  \item \textbf{Analyse d'images par l'IA} pour aider au pré-diagnostic à partir des photos jointes.
+  \item \textbf{Prédiction du temps de résolution} à partir de l'historique.
+  \item \textbf{Détection de doublons} parmi les demandes similaires.
+  \item \textbf{Notifications enrichies} (SMS, notifications push).
+  \item \textbf{Détection de tendances} sur les pannes récurrentes par produit.
+\end{itemize}
+
+Ces perspectives montrent que la solution développée constitue une base solide et extensible, sur laquelle de nombreuses évolutions à forte valeur ajoutée pourront s'appuyer.
