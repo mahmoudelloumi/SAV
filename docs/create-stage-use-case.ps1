@@ -69,6 +69,6 @@ $graphics.DrawLine($linePen, 1420, 348, 1140, 421)
 $graphics.DrawLine($linePen, 1420, 695, 1140, 601)
 $graphics.DrawLine($linePen, 1420, 715, 1140, 731)
 
-$bitmap.Save('C:\SAV\diagramme-cas-utilisation-stages.png', [System.Drawing.Imaging.ImageFormat]::Png)
+$bitmap.Save('C:\SAV\docs\diagramme-cas-utilisation-stages.png', [System.Drawing.Imaging.ImageFormat]::Png)
 $graphics.Dispose()
 $bitmap.Dispose()
